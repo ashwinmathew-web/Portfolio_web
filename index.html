@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Mathew — Cybersecurity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #06070b;
+      --surface: rgba(12, 13, 26, 0.65);
+      --border: rgba(226, 185, 111, 0.15);
+      --teal: #ffb834;
+      --teal-dim: #b47700;
+      --amber: #c8c8d4;
+      --text: #9cb1da;
+      --muted: #576595;
+      --white: #f1f4fa;
+      --mono: 'Share Tech Mono', monospace;
+      --sans: 'Inter', sans-serif;
+      --display: 'Syne', sans-serif;
+      --nav-bg: rgba(6, 7, 11, 0.85);
+      --terminal-bar-bg: #111224;
+      --tag-bg: rgba(255, 184, 52, 0.08);
+      --tag-border: rgba(255, 184, 52, 0.20);
+      --project-visual-bg: #0b0c16;
+      --radar-color: rgba(255, 184, 52, 0.15);
+      --grid-color: rgba(255, 184, 52, 0.03);
+      --card-hover-shadow: 0 0 25px rgba(255, 184, 52, 0.15);
+      --theme-transition: background 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                          color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                          border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                          box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                          transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    body.light-mode {
+      --bg: #f5f7fa;
+      --surface: rgba(255, 255, 255, 0.75);
+      --border: rgba(180, 119, 0, 0.2);
+      --teal: #b47700;
+      --teal-dim: #78350f;
+      --amber: #1e293b;
+      --text: #334155;
+      --muted: #64748b;
+      --white: #0f172a;
+      --nav-bg: rgba(245, 247, 250, 0.85);
+      --terminal-bar-bg: #cbd5e1;
+      --tag-bg: rgba(180, 119, 0, 0.08);
+      --tag-border: rgba(180, 119, 0, 0.20);
+      --project-visual-bg: #e2e8f0;
+      --radar-color: rgba(180, 119, 0, 0.12);
+      --grid-color: rgba(180, 119, 0, 0.04);
+      --card-hover-shadow: 0 4px 20px rgba(180, 119, 0, 0.12);
+    }
+
+    /* Apply transitions globally for theme changing */
+    body, nav, .nav-links a, .terminal, .terminal-bar, .stat-card, .stat-value, .stat-desc,
+    .skill-name, .skill-level, .skill-track, .cert-card, .cert-title, .project-card, 
+    .project-title, .project-desc, .project-visual, .timeline-school, .timeline-degree, 
+    .timeline-detail, .contact-link, .contact-link-icon, .lang-item, footer, 
+    h1, h2, h3, p, span, a, input, button {
+      transition: var(--theme-transition);
+    }
+
+    /* ── CANVAS BACKGROUND ── */
+    #hud-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background: var(--bg);
+    }
+
+    /* ── SWEEP SCREEN OVERLAY ── */
+    #theme-sweep {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      pointer-events: none;
+      background: linear-gradient(to bottom, 
+        transparent 0%, 
+        rgba(255, 184, 52, 0.4) 45%, 
+        rgba(255, 184, 52, 0.8) 50%, 
+        rgba(255, 184, 52, 0.4) 55%, 
+        transparent 100%
+      );
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    #theme-sweep.animating {
+      animation: sweepScan 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes sweepScan {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    }
+
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 5vw;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hud-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--teal);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 12px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hud-btn:hover {
+      border-color: var(--teal);
+      background: var(--tag-bg);
+      box-shadow: 0 0 10px rgba(255, 184, 52, 0.15);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 5vw 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--teal);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(44px, 6vw, 76px);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .hero-name span {
+      color: var(--teal);
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 400px;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      font-family: var(--mono);
+      font-size: 13px;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: var(--teal);
+      color: var(--bg);
+    }
+
+    /* Terminal card */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: var(--mono);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), var(--card-hover-shadow);
+    }
+
+    .terminal-bar {
+      background: var(--terminal-bar-bg);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .dot-r {
+      background: #ff5f56;
+    }
+
+    .dot-y {
+      background: #ffbd2e;
+    }
+
+    .dot-g {
+      background: #27c93f;
+    }
+
+    .terminal-title {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+      margin-right: auto;
+      letter-spacing: 0.05em;
+    }
+
+    .terminal-body {
+      padding: 24px;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .t-prompt {
+      color: var(--teal);
+    }
+
+    .t-cmd {
+      color: var(--white);
+    }
+
+    .t-out {
+      color: var(--muted);
+      padding-left: 16px;
+      display: block;
+    }
+
+    .t-label {
+      color: var(--amber);
+    }
+
+    .t-val {
+      color: var(--text);
+    }
+
+    .t-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--teal);
+      animation: blink 1.1s steps(1) infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 90px 5vw;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 48px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    .about-text p {
+      color: var(--text);
+      margin-bottom: 16px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 4px;
+    }
+
+    .stat-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+      box-shadow: var(--card-hover-shadow);
+    }
+
+    .stat-icon {
+      font-size: 22px;
+      width: 44px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-value {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .stat-desc {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SKILLS ── */
+    #skills {
+      background: var(--surface);
+      max-width: 100%;
+      padding: 90px 5vw;
+    }
+
+    #skills .inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .skill-bar-wrap {}
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .skill-name {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .skill-level {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .skill-track {
+      height: 3px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: var(--teal);
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .skill-fill.amber {
+      background: var(--amber);
+    }
+
+    /* ── CERTS ── */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .cert-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 4px;
+    }
+
+    .cert-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--teal);
+    }
+
+    .cert-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-3px);
+      box-shadow: var(--card-hover-shadow);
+    }
+
+    .cert-issuer {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .cert-title {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .cert-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--teal);
+    }
+
+    /* ── PROJECT ── */
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 4px;
+    }
+
+    .project-card:hover {
+      border-color: var(--teal);
+      box-shadow: var(--card-hover-shadow);
+    }
+
+    .project-info {
+      padding: 44px;
+    }
+
+    .project-number {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .project-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-visual {
+      background: var(--project-visual-bg);
+      border-left: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      min-height: 280px;
+    }
+
+    .eye-svg {
+      width: 120px;
+      opacity: 0.6;
+    }
+
+    /* Target hardcoded SVG assets */
+    .eye-svg [stroke="#e2b96f"] {
+      stroke: var(--teal);
+    }
+    .eye-svg [fill="#e2b96f"] {
+      fill: var(--teal);
+    }
+
+    /* ── EDUCATION ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 44px 28px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -5px;
+      top: 7px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-period {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .timeline-school {
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .timeline-degree {
+      font-size: 14px;
+      color: var(--teal);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .timeline-detail {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--surface);
+      max-width: 100%;
+      padding: 90px 5vw;
+      border-top: 1px solid var(--border);
+    }
+
+    #contact .inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-left p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-link:hover {
+      color: var(--teal);
+    }
+
+    .contact-link-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .contact-link:hover .contact-link-icon {
+      border-color: var(--teal);
+      background: rgba(0, 194, 168, 0.06);
+    }
+
+    .lang-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .lang-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .lang-flag {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 24px 5vw;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDER ── */
+    .full-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+
+      .hero-grid,
+      .about-grid,
+      .certs-grid,
+      .project-card,
+      #contact .inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-visual {
+        display: none;
+      }
+
+      .hero-cta {
+        display: inline-flex;
+      }
+
+      nav {
+        padding: 14px 5vw;
+      }
+
+      .nav-links {
+        gap: 18px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="hud-canvas"></canvas>
+  <div id="theme-sweep"></div>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">ashwin@sec:~$</span>
+    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: flex-end;">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#project">Project</a></li>
+        <li><a href="#certs">Certs</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button id="theme-toggle" class="hud-btn" aria-label="Toggle System Mode">
+        <span class="hud-btn-tag">[SYS_MODE: DARK]</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" style="max-width:100%; padding-top:120px;">
+    <div class="hero-grid" style="margin:0 auto;">
+      <div class="hero-left">
+        <p class="hero-eyebrow">// security researcher &amp; developer</p>
+        <h1 class="hero-name">Ashwin<br><span>Mathew</span></h1>
+        <p class="hero-tagline">
+          Computer Science undergraduate focused on cybersecurity — network defense, ethical hacking, and identity &amp;
+          access management.
+        </p>
+        <a href="#contact" class="hero-cta">
+          <span>→</span> Get in touch
+        </a>
+      </div>
+      <div class="hero-right">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="dot dot-r"></span>
+            <span class="dot dot-y"></span>
+            <span class="dot dot-g"></span>
+            <span class="terminal-title">whoami.sh</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-prompt">❯ </span><span class="t-cmd">whoami</span></div>
+            <span class="t-out"><span class="t-label">name </span> <span class="t-val">Ashwin Mathew</span></span>
+            <span class="t-out"><span class="t-label">role </span> <span class="t-val">CS Undergrad @
+                MBCET</span></span>
+            <span class="t-out"><span class="t-label">focus </span> <span class="t-val">Cybersecurity &amp; Ethical
+                Hacking</span></span>
+            <span class="t-out"><span class="t-label">location </span> <span class="t-val">Kottayam,
+                Kerala</span></span>
+            <span class="t-out"><span class="t-label">status </span> <span class="t-val" style="color:#27c93f;">●
+                Seeking internship</span></span>
+            <br>
+            <div><span class="t-prompt">❯ </span><span class="t-cmd">cat certifications.txt</span></div>
+            <span class="t-out" style="color:var(--teal);">Certified Cyber Security &amp; Ethical Hacking</span>
+            <span class="t-out" style="color:var(--teal);">Cybersecurity Analyst Job Simulation</span>
+            <br>
+            <div><span class="t-prompt">❯ </span><span class="t-cmd"></span><span class="t-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider">
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">// 01 — about</p>
+    <h2 class="section-title">Who I am</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a motivated Computer Science undergraduate at Mar Baselios Christian College of Engineering and
+          Technology, with a deep interest in cybersecurity. My focus spans network security, Linux systems, and ethical
+          hacking fundamentals.
+        </p>
+        <p>
+          I build practical skills through hands-on labs and open source projects — not just theory. Currently, I'm
+          pursuing a cybersecurity internship to bring real impact to security initiatives while still in college.
+        </p>
+        <p>
+          My most recent project, an AI-assisted color vision detection system, shows how I apply my development skills
+          to problems that actually matter to people.
+        </p>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-icon">🎓</div>
+          <div class="stat-content">
+            <div class="stat-value">B.Tech CS</div>
+            <div class="stat-desc">APJ Abdul Kalam Tech. University · 2023 – Present</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-content">
+            <div class="stat-value">2 Certs</div>
+            <div class="stat-desc">Cybersecurity &amp; IAM · Earned 2025</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔐</div>
+          <div class="stat-content">
+            <div class="stat-value">Open to work</div>
+            <div class="stat-desc">Cybersecurity internship · Kerala &amp; Remote</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌐</div>
+          <div class="stat-content">
+            <div class="stat-value">4 Languages</div>
+            <div class="stat-desc">English · Malayalam · Hindi · Tamil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider">
+
+  <!-- SKILLS -->
+  <div id="skills">
+    <div class="inner">
+      <p class="section-label">// 02 — skills</p>
+      <h2 class="section-title">Technical stack</h2>
+      <div class="skills-grid" id="skills-grid">
+        <!-- Programming -->
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">Python</span>
+            <span class="skill-level">Proficient</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="80"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">C Programming</span>
+            <span class="skill-level">Proficient</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="75"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">HTML &amp; CSS</span>
+            <span class="skill-level">Proficient</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="78"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">SQL</span>
+            <span class="skill-level">Intermediate</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill" data-width="65"></div>
+          </div>
+        </div>
+        <!-- Security -->
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">Linux Systems</span>
+            <span class="skill-level">Intermediate</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill amber" data-width="72"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">Network Security</span>
+            <span class="skill-level">Intermediate</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill amber" data-width="68"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">Pentesting Methodologies</span>
+            <span class="skill-level">Learning</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill amber" data-width="55"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap">
+          <div class="skill-header">
+            <span class="skill-name">IAM &amp; SOC / SIEM</span>
+            <span class="skill-level">Intermediate</span>
+          </div>
+          <div class="skill-track">
+            <div class="skill-fill amber" data-width="62"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="full-divider">
+
+  <!-- PROJECT -->
+  <section id="project">
+    <p class="section-label">// 03 — project</p>
+    <h2 class="section-title">Featured work</h2>
+    <div class="project-card">
+      <div class="project-info">
+        <p class="project-number">PROJECT_001</p>
+        <h3 class="project-title">AI Assisted Color Vision Detection System</h3>
+        <p class="project-desc">
+          A web-based diagnostic tool for early detection of Color Vision Deficiency. Implements Ishihara and Farnsworth
+          test protocols to identify conditions like Protanopia and Deuteranopia. Collects and analyzes user responses
+          to deliver accurate, accessible results.
+        </p>
+        <div class="project-stack">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">JSON</span>
+          <span class="tag">AI-assisted</span>
+        </div>
+      </div>
+      <div class="project-visual">
+        <!-- Eye / vision SVG illustration -->
+        <svg class="eye-svg" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="60" rx="90" ry="50" stroke="#e2b96f" stroke-width="1.5" stroke-dasharray="4 3"
+            opacity="0.4" />
+          <ellipse cx="100" cy="60" rx="60" ry="35" stroke="#e2b96f" stroke-width="1" opacity="0.3" />
+          <circle cx="100" cy="60" r="22" stroke="#e2b96f" stroke-width="1.5" opacity="0.7" />
+          <circle cx="100" cy="60" r="12" fill="#e2b96f" opacity="0.12" />
+          <circle cx="100" cy="60" r="5" fill="#e2b96f" opacity="0.6" />
+          <!-- Ishihara-inspired colored dots -->
+          <circle cx="78" cy="48" r="4" fill="#c8c8d4" opacity="0.4" />
+          <circle cx="122" cy="48" r="4" fill="#c8c8d4" opacity="0.4" />
+          <circle cx="65" cy="62" r="3" fill="#c8c8d4" opacity="0.3" />
+          <circle cx="135" cy="62" r="3" fill="#c8c8d4" opacity="0.3" />
+          <circle cx="82" cy="74" r="3.5" fill="#e2b96f" opacity="0.4" />
+          <circle cx="118" cy="74" r="3.5" fill="#e2b96f" opacity="0.4" />
+          <!-- Scan line -->
+          <line x1="10" y1="60" x2="190" y2="60" stroke="#e2b96f" stroke-width="0.5" opacity="0.2" />
+          <line x1="100" y1="5" x2="100" y2="115" stroke="#e2b96f" stroke-width="0.5" opacity="0.2" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider">
+
+  <!-- CERTS -->
+  <section id="certs">
+    <p class="section-label">// 04 — certifications</p>
+    <h2 class="section-title">Credentials</h2>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <p class="cert-issuer">Techmaghi · 2025</p>
+        <h3 class="cert-title">Certified Cyber Security &amp; Ethical Hacking</h3>
+        <div class="cert-tags">
+          <span class="tag">Linux Essentials</span>
+          <span class="tag">Network Fundamentals</span>
+          <span class="tag">Pentesting</span>
+          <span class="tag">SOC</span>
+          <span class="tag">SIEM</span>
+        </div>
+      </div>
+      <div class="cert-card">
+        <p class="cert-issuer">Forage · 2025</p>
+        <h3 class="cert-title">Cybersecurity Analyst Job Simulation</h3>
+        <div class="cert-tags">
+          <span class="tag">IAM Fundamentals</span>
+          <span class="tag">IAM Strategy</span>
+          <span class="tag">Custom IAM Solutions</span>
+          <span class="tag">Platform Integration</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider">
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <p class="section-label">// 05 — education</p>
+    <h2 class="section-title">Academic background</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="timeline-period">Aug 2023 – Present</p>
+        <h3 class="timeline-school">Mar Baselios Christian College of Engineering &amp; Technology</h3>
+        <p class="timeline-degree">B.Tech — Computer Science · APJ Abdul Kalam Technological University</p>
+        <p class="timeline-detail">Relevant coursework in Cybersecurity · Peermade, Idukki</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:var(--amber);"></div>
+        <p class="timeline-period">May 2021 – May 2023</p>
+        <h3 class="timeline-school">Girideepam Bethany Central School</h3>
+        <p class="timeline-degree">Higher Secondary School</p>
+        <p class="timeline-detail">Vadavathoor, Kottayam</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="full-divider">
+
+  <!-- CONTACT -->
+  <div id="contact">
+    <div class="inner">
+      <div class="contact-left">
+        <p class="section-label">// 06 — contact</p>
+        <h2 class="section-title" style="margin-bottom:20px;">Let's connect</h2>
+        <p>
+          I'm actively looking for cybersecurity internship opportunities. Whether you have a project, an opening, or
+          just want to talk security — reach out.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:ashwinmathew4321@gmail.com" class="contact-link">
+            <span class="contact-link-icon">✉</span>
+            ashwinmathew4321@gmail.com
+          </a>
+          <a href="tel:+917025262100" class="contact-link">
+            <span class="contact-link-icon">☎</span>
+            +91 70252 62100
+          </a>
+          <a href="#" class="contact-link" style="color:var(--muted);pointer-events:none;">
+            <span class="contact-link-icon" style="opacity:0.4;">📍</span>
+            Kottayam, Kerala, India
+          </a>
+        </div>
+      </div>
+      <div class="contact-right">
+        <p class="section-label" style="margin-bottom:20px;">// Languages spoken</p>
+        <div class="lang-grid">
+          <div class="lang-item">English<span class="lang-flag">Fluent</span></div>
+          <div class="lang-item">മലയാളം<span class="lang-flag">Native</span></div>
+          <div class="lang-item">हिन्दी<span class="lang-flag">Fluent</span></div>
+          <div class="lang-item">தமிழ்<span class="lang-flag">Conversational</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Ashwin Mathew — Built from scratch</p>
+    <p style="color:var(--teal); font-family:'Share Tech Mono',monospace; font-size:12px;">stay curious. stay secure.
+    </p>
+  </footer>
+
+  <script>
+    // ── ANIMATE SKILL BARS ON SCROLL ──
+    const fills = document.querySelectorAll('.skill-fill');
+    const skillObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          el.style.width = el.dataset.width + '%';
+          skillObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    fills.forEach(f => skillObserver.observe(f));
+
+    // ── SYSTEM MODE (DARK/LIGHT) SWITCHER & SWEEP SCAN ──
+    const themeToggle = document.getElementById('theme-toggle');
+    const sweep = document.getElementById('theme-sweep');
+
+    themeToggle.addEventListener('click', () => {
+      if (sweep.classList.contains('animating')) return; // prevent double triggers
+
+      // Start the swipe scanning animation
+      sweep.classList.add('animating');
+
+      // Swap the theme at 400ms (exactly when the sweep bar covers the middle of the screen)
+      setTimeout(() => {
+        const isLight = document.body.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+        // Update the display text on the button
+        themeToggle.querySelector('.hud-btn-tag').textContent = isLight 
+          ? '[SYS_MODE: LIGHT]' 
+          : '[SYS_MODE: DARK]';
+
+        // Update cached colors for canvas drawing
+        updateCanvasColors();
+      }, 400);
+
+      // Reset animation class after completion (800ms)
+      sweep.addEventListener('animationend', function handler() {
+        sweep.classList.remove('animating');
+        sweep.removeEventListener('animationend', handler);
+      });
+    });
+
+    // Load persisted user theme setting
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      themeToggle.querySelector('.hud-btn-tag').textContent = '[SYS_MODE: LIGHT]';
+    } else {
+      document.body.classList.remove('light-mode');
+      themeToggle.querySelector('.hud-btn-tag').textContent = '[SYS_MODE: DARK]';
+    }
+
+    // ── TACTICAL HUD CANVAS GRID & RADAR ENGINE ──
+    const canvas = document.getElementById('hud-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    // Handle screen resizing
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      updateRadarCenter();
+    });
+
+    // Caching colors to avoid document layout recalculations in loop
+    let primaryColor = '#ffb834';
+    let radarColor = 'rgba(255, 184, 52, 0.15)';
+    let gridColor = 'rgba(255, 184, 52, 0.03)';
+
+    function updateCanvasColors() {
+      const style = getComputedStyle(document.body);
+      primaryColor = style.getPropertyValue('--teal').trim();
+      radarColor = style.getPropertyValue('--radar-color').trim();
+      gridColor = style.getPropertyValue('--grid-color').trim();
+    }
+
+    // Initialize cached colors
+    updateCanvasColors();
+
+    // Utility to parse hex to rgba
+    function hexToRgba(hex, alpha) {
+      if (hex.startsWith('rgba')) {
+        return hex.replace(/[\d\.]+\)$/g, `${alpha})`);
+      }
+      let c;
+      if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+        c = hex.substring(1).split('');
+        if (c.length === 3) {
+          c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c = '0x' + c.join('');
+        return `rgba(${(c >> 16) & 255}, ${(c >> 8) & 255}, ${c & 255}, ${alpha})`;
+      }
+      return `rgba(255, 184, 52, ${alpha})`;
+    }
+
+    // Radar Center & Parameters
+    let cx = width / 2;
+    let cy = height / 2;
+    function updateRadarCenter() {
+      cx = width / 2;
+      cy = height / 2;
+    }
+
+    let sweepAngle = 0;
+    const sweepSpeed = 0.004; // Slow, deliberate scan speed
+
+    // Mouse Tracking
+    let mouse = { x: null, y: null, active: false };
+    let ripples = [];
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+
+      // Spawn a ripple occasionally
+      if (Math.random() < 0.06) {
+        ripples.push({
+          x: e.clientX,
+          y: e.clientY,
+          r: 3,
+          maxR: 90,
+          speed: 1.2,
+          alpha: 0.5
+        });
+      }
+    });
+
+    window.addEventListener('mouseleave', () => {
+      mouse.active = false;
+    });
+
+    // Particle nodes
+    class Node {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.3; // Very slow drift
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.radius = Math.random() * 2 + 1.2;
+        this.baseAlpha = Math.random() * 0.2 + 0.1;
+        this.alpha = this.baseAlpha;
+        this.flash = 0;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Wrap or bounce at boundaries
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+        // Fade out highlights
+        if (this.flash > 0) {
+          this.flash -= 0.015;
+        } else {
+          this.flash = 0;
+        }
+
+        this.alpha = this.baseAlpha + this.flash * 0.5;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = hexToRgba(primaryColor, this.alpha);
+        ctx.fill();
+        
+        // Target indicators on nodes with active flashes
+        if (this.flash > 0.6) {
+          ctx.strokeStyle = hexToRgba(primaryColor, this.flash * 0.4);
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius + 6, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+    }
+
+    const nodes = [];
+    const maxNodes = 55;
+    for (let i = 0; i < maxNodes; i++) {
+      nodes.push(new Node());
+    }
+
+    // Main HUD Render Loop
+    function renderHUD() {
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Draw static grid coordinates/HUD layout
+      const gridSize = 90;
+      ctx.fillStyle = gridColor;
+      for (let x = 0; x < width; x += gridSize) {
+        for (let y = 0; y < height; y += gridSize) {
+          // Draw small plus signs at intersections
+          ctx.fillRect(x - 2, y, 5, 1);
+          ctx.fillRect(x, y - 2, 1, 5);
+        }
+      }
+
+      // Draw concentric radar indicator rings
+      ctx.strokeStyle = radarColor;
+      ctx.lineWidth = 0.4;
+      const minDimension = Math.min(width, height);
+      const ringSpacing = minDimension / 5;
+      for (let i = 1; i <= 4; i++) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringSpacing * i, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 2. Draw radar sweep beam
+      sweepAngle += sweepSpeed;
+      if (sweepAngle > Math.PI * 2) sweepAngle -= Math.PI * 2;
+
+      const maxRadius = Math.sqrt(cx * cx + cy * cy);
+      const sweepSegments = 30;
+      for (let i = 0; i < sweepSegments; i++) {
+        const angle = sweepAngle - (i * 0.012);
+        const alpha = 0.12 * (1 - i / sweepSegments);
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * maxRadius, cy + Math.sin(angle) * maxRadius);
+        ctx.strokeStyle = hexToRgba(primaryColor, alpha);
+        ctx.lineWidth = i === 0 ? 1.2 : 0.8;
+        ctx.stroke();
+      }
+
+      // 3. Draw connection lines between nearby particles
+      ctx.lineWidth = 0.4;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 110) {
+            const avgFlash = (nodes[i].flash + nodes[j].flash) / 2;
+            const baseOpacity = (1 - dist / 110) * 0.12;
+            const opacity = baseOpacity + avgFlash * 0.25;
+
+            ctx.strokeStyle = hexToRgba(primaryColor, opacity);
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // 4. Update and Draw active nodes
+      nodes.forEach(node => {
+        node.update();
+
+        // Let sweep activate particles as it intersects them
+        let nodeAngle = Math.atan2(node.y - cy, node.x - cx);
+        if (nodeAngle < 0) nodeAngle += Math.PI * 2;
+
+        let angleDiff = sweepAngle - nodeAngle;
+        if (angleDiff < 0) angleDiff += Math.PI * 2;
+        
+        // If sweep beam is directly crossing the particle, trigger threat flash
+        if (angleDiff < 0.04) {
+          node.flash = 1.0;
+        }
+
+        node.draw();
+      });
+
+      // 5. Connect mouse coordinates to nearby nodes (active connection)
+      if (mouse.active && mouse.x !== null) {
+        for (let i = 0; i < nodes.length; i++) {
+          const dx = mouse.x - nodes[i].x;
+          const dy = mouse.y - nodes[i].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 130) {
+            const opacity = (1 - dist / 130) * 0.35;
+            ctx.strokeStyle = hexToRgba(primaryColor, opacity);
+            ctx.beginPath();
+            ctx.moveTo(mouse.x, mouse.y);
+            ctx.lineTo(nodes[i].x, nodes[i].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // 6. Draw active radar ripple effects
+      ripples.forEach((ripple, idx) => {
+        ripple.r += ripple.speed;
+        ripple.alpha -= 0.01;
+        
+        if (ripple.alpha <= 0) {
+          ripples.splice(idx, 1);
+          return;
+        }
+
+        ctx.beginPath();
+        ctx.arc(ripple.x, ripple.y, ripple.r, 0, Math.PI * 2);
+        ctx.strokeStyle = hexToRgba(primaryColor, ripple.alpha);
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      });
+
+      requestAnimationFrame(renderHUD);
+    }
+
+    // Start HUD loop
+    requestAnimationFrame(renderHUD);
+  </script>
+</body>
+
+</html>
