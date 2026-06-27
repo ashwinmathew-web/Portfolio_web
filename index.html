@@ -643,6 +643,22 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .project-links .hud-btn {
+      text-decoration: none;
+      gap: 8px;
+    }
+
+    .project-card + .project-card {
+      margin-top: 32px;
     }
 
     .project-visual {
@@ -1102,9 +1118,9 @@
         <p class="project-number">PROJECT_001</p>
         <h3 class="project-title">AI Assisted Color Vision Detection System</h3>
         <p class="project-desc">
-          A web-based diagnostic tool for early detection of Color Vision Deficiency. Implements Ishihara and Farnsworth
-          test protocols to identify conditions like Protanopia and Deuteranopia. Collects and analyzes user responses
-          to deliver accurate, accessible results.
+          A browser extension and diagnostic tool for Color Vision Deficiency. Uses AI to diagnose the specific type
+          of color blindness (such as Protanopia and Deuteranopia) and applies tailored real-time color filters in
+          the browser to correct and compensate for that deficiency.
         </p>
         <div class="project-stack">
           <span class="tag">HTML</span>
@@ -1112,6 +1128,9 @@
           <span class="tag">JavaScript</span>
           <span class="tag">JSON</span>
           <span class="tag">AI-assisted</span>
+        </div>
+        <div class="project-links">
+          <a class="hud-btn" href="https://github.com/Ashil2005/colorvision/tree/dan2" target="_blank" rel="noopener noreferrer">[ GITHUB ]</a>
         </div>
       </div>
       <div class="project-visual">
@@ -1133,6 +1152,49 @@
           <!-- Scan line -->
           <line x1="10" y1="60" x2="190" y2="60" stroke="#e2b96f" stroke-width="0.5" opacity="0.2" />
           <line x1="100" y1="5" x2="100" y2="115" stroke="#e2b96f" stroke-width="0.5" opacity="0.2" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-info">
+        <p class="project-number">PROJECT_002</p>
+        <h3 class="project-title">Smart Hospital: Medical Equipment Health Monitoring System</h3>
+        <p class="project-desc">
+          A full-stack, IoT-powered platform for hospitals to monitor the operation, sensor metrics, and maintenance
+          lifecycles of critical equipment such as ventilators, MRI machines, infusion pumps, and defibrillators.
+          Streams live telemetry over MQTT, applies predictive maintenance logic, and supports incident management
+          through role-based control panels.
+        </p>
+        <div class="project-stack">
+          <span class="tag">React</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">MQTT</span>
+          <span class="tag">Python</span>
+          <span class="tag">IoT</span>
+        </div>
+        <div class="project-links">
+          <a class="hud-btn" href="https://github.com/ashwinmathew-web/Smart-Hospital-Medical-Equipment-Health-Monitoring-System/tree/main" target="_blank" rel="noopener noreferrer">[ GITHUB ]</a>
+          <a class="hud-btn" href="https://github.com/ashwinmathew-web/Smart-Hospital-Medical-Equipment-Health-Monitoring-System/tree/main#readme" target="_blank" rel="noopener noreferrer">[ SETUP GUIDE ]</a>
+        </div>
+      </div>
+      <div class="project-visual">
+        <!-- Pulse / telemetry monitor SVG illustration -->
+        <svg class="eye-svg" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="160" height="80" rx="4" stroke="#e2b96f" stroke-width="1.5" opacity="0.4" />
+          <polyline points="28,65 55,65 65,40 78,90 92,65 108,65 118,50 130,80 142,65 172,65"
+            stroke="#e2b96f" stroke-width="1.5" fill="none" opacity="0.75" />
+          <circle cx="65" cy="40" r="2.5" fill="#e2b96f" opacity="0.6" />
+          <circle cx="78" cy="90" r="2.5" fill="#e2b96f" opacity="0.6" />
+          <circle cx="118" cy="50" r="2.5" fill="#e2b96f" opacity="0.6" />
+          <!-- Signal nodes -->
+          <circle cx="40" cy="30" r="3" fill="#c8c8d4" opacity="0.4" />
+          <circle cx="160" cy="30" r="3" fill="#c8c8d4" opacity="0.4" />
+          <circle cx="40" cy="90" r="3" fill="#c8c8d4" opacity="0.3" />
+          <circle cx="160" cy="90" r="3" fill="#c8c8d4" opacity="0.3" />
+          <!-- Scan line -->
+          <line x1="10" y1="60" x2="190" y2="60" stroke="#e2b96f" stroke-width="0.5" opacity="0.15" />
         </svg>
       </div>
     </div>
